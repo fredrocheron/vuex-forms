@@ -1,9 +1,9 @@
 <div class="form-group">
     <label v-html="label"></label>
-    <label v-for="option in options" :for="(id || name) + option[option_name]">
+    <label v-for="option in options" :for="(id || name) + option[option_value]">
         <input type="radio"
                :name="name"
-               :id="(id || name) + option[option_name]"
+               :id="(id || name) + option[option_value]"
                :value="option[option_value]"
                :checked="value === option[option_value]"
                @change="handleRadio"
