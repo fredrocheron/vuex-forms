@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label v-html="label"></label>
+    <label v-html="label" v-if="label"></label>
     <div class="radio" v-for="option in options" :for="(id || name) + option[option_value]">
         <label>
             <input type="radio"
