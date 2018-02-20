@@ -1,16 +1,18 @@
 <div class="form-group">
-    <label :for="id">
-        <input ref="input"
-               :id="id"
-               :name="name"
-               type="checkbox"
-               :value="value"
-               :checked="value === trueValue"
-               :required="required"
-               @change="handleCheckbox"
-               class="form-control">
-        {{ label }}
-    </label>
+    <div class="checkbox">
+            <label :for="id">
+            <input ref="input"
+                   :id="id"
+                   :name="name"
+                   type="checkbox"
+                   :value="value"
+                   :checked="value === trueValue"
+                   :required="required"
+                   @change="handleCheckbox"
+                   class="form-control">
+            {{ label }}
+        </label>
+    </div>
     <ul class="form-errors" v-if="fieldErrors">
         <li v-for="error in fieldErrors">{{ error }}</li>
     </ul>
