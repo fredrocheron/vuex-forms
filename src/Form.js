@@ -4,7 +4,7 @@ import validationMessages from "./lang/en/messages.js"
 
 const defaultConfig = {
     vuexAction: false,
-    submitMethod: false,
+    vueMethod: false,
     validations: null,
     defaultMessages: validationMessages,
     overrideMessages: {},
@@ -43,7 +43,7 @@ export default class Form {
         this._hasValidator = false
         this._submitter    = null
         this._vuex         = false
-        this.vueMethod         = false
+        this._vueMethod         = false
         this._timers       = {
             inputDebounce: 0,
         }
@@ -100,7 +100,7 @@ export default class Form {
      * @param apiHandler
      */
     setupSubmitter(vm, apiHandler) {
-        if (this._config.vuexAction === false && this._config.submitMethod === false) {
+        if (this._config.vuexAction === false && this._config.vueMethod === false) {
             this._submitter = false;
             return
         }
@@ -110,7 +110,7 @@ export default class Form {
         if (this._submitter === VUEX_FORM) {
             this._vuex = vm.$store
         } else {
-            this.vueMethod = vm[this._config.submitMethod]
+            this._vueMethod = vm[this._config.vueMethod]
         }
     }
 
@@ -250,7 +250,7 @@ export default class Form {
         if (this._submitter === VUEX_FORM) {
             promise = this._vuex.dispatch(this._config.vuexAction, this.data());
         } else if (this._submitter === VUE_FORM) {
-            promise = this.vueMethod(this.data());
+            promise = this._vueMethod(this.data());
         }
 
         if (promise) {
