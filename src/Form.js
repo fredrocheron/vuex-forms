@@ -4,9 +4,7 @@ import validationMessages from "./lang/en/messages.js"
 
 const defaultConfig = {
     vuexAction: false,
-    ajaxURL: false,
-    ajaxMethod: 'POST',
-    ajaxTimeout: 10000,
+    submitMethod: false,
     validations: null,
     defaultMessages: validationMessages,
     overrideMessages: {},
@@ -21,7 +19,7 @@ const defaultConfig = {
 }
 
 const VUEX_FORM = 'VUEX'
-const AJAX_FORM = 'AJAX'
+const VUE_FORM = 'VUE'
 
 // thanks Vuelidate for the following
 let _cachedVue = null
@@ -35,7 +33,7 @@ function getVue(rootVm) {
 }
 
 export default class Form {
-    constructor(vm, data, config = {}, apiHandler = null) {
+    constructor(vm, data, config = {}) {
         let Vue            = getVue(vm)
         // define all properties (for reference)
         this.errors        = new Errors()
@@ -45,14 +43,14 @@ export default class Form {
         this._hasValidator = false
         this._submitter    = null
         this._vuex         = false
-        this._ajax         = false
+        this.vueMethod         = false
         this._timers       = {
             inputDebounce: 0,
         }
 
         this.setConfig(config)
         this.setupData(data)
-        this.setupSubmitter(vm, apiHandler)
+        this.setupSubmitter(vm)
         this.setupValidator(Vue)
 
         // validate the form on load
@@ -102,17 +100,17 @@ export default class Form {
      * @param apiHandler
      */
     setupSubmitter(vm, apiHandler) {
-        if (this._config.vuexAction === false && this._config.ajaxURL === false) {
+        if (this._config.vuexAction === false && this._config.submitMethod === false) {
             this._submitter = false;
             return
         }
-        this._submitter = this._config.vuexAction !== false ? VUEX_FORM : AJAX_FORM
+        this._submitter = this._config.vuexAction !== false ? VUEX_FORM : VUE_FORM;
         // if vuex, save a reference to the $store
         // if ajax, save a reference to the API handler
         if (this._submitter === VUEX_FORM) {
             this._vuex = vm.$store
         } else {
-            this._ajax = apiHandler
+            this.vueMethod = vm[this._config.submitMethod]
         }
     }
 
@@ -248,23 +246,30 @@ export default class Form {
         if (this._submitter === false) {
             return false;
         }
+        let promise;
+        if (this._submitter === VUEX_FORM) {
+            promise = this._vuex.dispatch(this._config.vuexAction, this.data());
+        } else if (this._submitter === VUE_FORM) {
+            promise = this.vueMethod(this.data());
+        }
 
-        // dispatch the action with the data fields as the argument
-        return new Promise((resolve, reject) => {
-            return this._vuex.dispatch(this._config.vuexAction, this.data())
-                .then(data => {
-                    this.errors.clear()
-                    resolve(data)
-                })
-                .catch(errors => {
-                    // errors occurred, record them, make the fields dirty and emit a validate event
-                    this.errors.clear()
-                    this.errors.record(errors)
-                    this.$v.$touch()
-                    this.$bus.$emit('validate')
-                    reject(errors)
-                })
-        })
+        if (promise) {
+            return new Promise((resolve, reject) => {
+                return promise
+                    .then(data => {
+                        this.errors.clear()
+                        resolve(data)
+                    })
+                    .catch(errors => {
+                        // errors occurred, record them, make the fields dirty and emit a validate event
+                        this.errors.clear()
+                        this.errors.record(errors)
+                        this.$v.$touch()
+                        this.$bus.$emit('validate')
+                        reject(errors)
+                    })
+            })
+        }
     }
 
     /**
