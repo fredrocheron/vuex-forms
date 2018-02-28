@@ -78,9 +78,11 @@ export default class Form {
      * @param data
      */
     setupData(data) {
-        this._data = Object.assign({}, {_original: data}, data);
-        for (let field in data) {
-            if (data.hasOwnProperty(field)) {
+        const stringed = this.stringValues(data);
+        this._data = Object.assign({}, {_original: stringed}, stringed);
+        // this._data = Object.assign({}, {_original: data}, data);
+        for (let field in stringed) {
+            if (stringed.hasOwnProperty(field)) {
                 Object.defineProperty(this, field, {
                     get: function () {
                         return this._data[field]
@@ -91,6 +93,20 @@ export default class Form {
                 })
             }
         }
+    }
+
+    stringValues(data) {
+      if (data instanceof Array) {
+        return data.map(el => this.stringValues(el))
+      } else if (data instanceof Object) {
+          const obj = {}
+          Object.getOwnPropertyNames(data)
+            .forEach(elId => obj[elId] = this.stringValues(data[elId]))
+
+          return obj
+      }
+
+      return '' + data
     }
 
     /**
@@ -181,7 +197,7 @@ export default class Form {
     data() {
         let data = {}
         for (let field in this._data._original) {
-            data[field] = '' + this._data[field]
+            data[field] = this._data[field]
         }
 
         return data
