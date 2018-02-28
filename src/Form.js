@@ -78,9 +78,7 @@ export default class Form {
      * @param data
      */
     setupData(data) {
-        // this._data = Object.assign({}, {_original: data}, data);
-        this._data = data;
-        this._data._original = data
+        this._data = Object.assign({}, {_original: data}, data);
         for (let field in data) {
             if (data.hasOwnProperty(field)) {
                 Object.defineProperty(this, field, {
