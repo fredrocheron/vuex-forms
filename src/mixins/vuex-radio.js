@@ -10,7 +10,6 @@ export default () => merge.recursive(true, VuexField, {
     methods: {
         handleRadio(event) {
             let newEvent = this.createEvent(event, 'input');
-            newEvent.target.value = event.target.value;
             this.inputEvent(newEvent);
         },
     }
