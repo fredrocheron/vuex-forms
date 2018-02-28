@@ -181,7 +181,7 @@ export default class Form {
     data() {
         let data = {}
         for (let field in this._data._original) {
-            data[field] = this._data[field]
+            data[field] = '' + this._data[field]
         }
 
         return data
