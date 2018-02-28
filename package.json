@@ -10,8 +10,8 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "docs": "rm -rf docs-dist && node build/build.js",
-    "bundle:web": "rm -rf dist && NODE_ENV=production BUILD=web webpack --config build/webpack.bundle.conf.js",
-    "bundle:lib": "rm -rf lib && BUILD=lib babel src --out-dir lib && cpx 'src/templates/**/*' 'lib/templates'",
+    "bundle:web": "rm -rf dist && set NODE_ENV=production && set BUILD=web && webpack --config build/webpack.bundle.conf.js",
+    "bundle:lib": "rm -rf lib && xcopy .\\src\\templates .\\lib\\templates\\ /E && set BUILD=lib && npx babel src --out-dir lib",
     "build": "npm run bundle:lib && npm run bundle:web"
   },
   "dependencies": {
@@ -21,7 +21,7 @@
   "devDependencies": {
     "autoprefixer": "^6.7.2",
     "axios": "^0.16.1",
-    "babel-cli": "^6.24.1",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^6.2.10",
