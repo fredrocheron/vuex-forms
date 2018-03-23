@@ -105,9 +105,11 @@ export default class Form {
                 .forEach(elId => obj[elId] = this.stringValues(data[elId]));
 
             return obj;
+        } else if (data == null) {
+            return ''
         }
 
-        return '' + data;
+        return '' + data
     }
 
     /**
