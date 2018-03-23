@@ -43,7 +43,9 @@ export default class Form {
         this._hasValidator = false
         this._submitter    = null
         this._vuex         = false
-        this._vueMethod         = false
+        this._vueMethod    = false
+        this._initialized  = false
+
         this._timers       = {
             inputDebounce: 0,
         }
@@ -79,19 +81,29 @@ export default class Form {
      */
     setupData(data) {
         const stringed = this.stringValues(data);
-        this._data = Object.assign({}, {_original: stringed}, stringed);
-        // this._data = Object.assign({}, {_original: data}, data);
-        for (let field in stringed) {
-            if (stringed.hasOwnProperty(field)) {
-                Object.defineProperty(this, field, {
-                    get: function () {
-                        return this._data[field]
-                    },
-                    set: function (value) {
-                        this._data[field] = value
-                    }
-                })
+        if (!this._initialized) {
+            this._data = Object.assign({}, {_original: stringed}, stringed);
+            // this._data = Object.assign({}, {_original: data}, data);
+            for (let field in stringed) {
+                if (stringed.hasOwnProperty(field)) {
+                    Object.defineProperty(this, field, {
+                        get: function () {
+                            return this._data[field]
+                        },
+                        set: function (value) {
+                            this._data[field] = value
+                        }
+                    })
+                }
             }
+            this._initialized = true;
+        } else {
+            for (let field in stringed) {
+                if (stringed.hasOwnProperty(field)) {
+                    this[field] = stringed[field]
+                }
+            }
+            this._data._original = stringed;
         }
     }
 
