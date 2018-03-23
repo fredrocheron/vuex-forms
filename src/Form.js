@@ -1,6 +1,6 @@
-import Errors from "./Errors"
-import {validationMixin} from "vuelidate"
-import validationMessages from "./lang/en/messages.js"
+import Errors from './Errors';
+import { validationMixin } from 'vuelidate';
+import validationMessages from './lang/en/messages.js';
 
 const defaultConfig = {
     vuexAction: false,
@@ -96,17 +96,18 @@ export default class Form {
     }
 
     stringValues(data) {
-      if (data instanceof Array) {
-        return data.map(el => this.stringValues(el))
-      } else if (data instanceof Object) {
-          const obj = {}
-          Object.getOwnPropertyNames(data)
-            .forEach(elId => obj[elId] = this.stringValues(data[elId]))
+        if (data instanceof Array) {
+            return data.map(el => this.stringValues(el));
+        } else if (data instanceof Object) {
+            const obj = {};
+            Object.getOwnPropertyNames(data)
+                .filter(elId => elId.indexOf('__') !== 0)
+                .forEach(elId => obj[elId] = this.stringValues(data[elId]));
 
-          return obj
-      }
+            return obj;
+        }
 
-      return '' + data
+        return '' + data;
     }
 
     /**
