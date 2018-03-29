@@ -29,7 +29,7 @@ export default class Errors {
     }
 
     record(errors) {
-        if (errors.length < 1) return
+        if (errors == null || errors.length < 1) return
         // use a new errors object to trigger reactivity in forms
         let newErrors = {}
 
