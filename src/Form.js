@@ -297,7 +297,7 @@ export default class Form {
                         this.errors.record(errors)
                         this.$v.$touch()
                         this.$bus.$emit('validate')
-                        reject(errors)
+                        // reject(errors)
                     })
             })
         }
