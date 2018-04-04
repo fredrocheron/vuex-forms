@@ -291,13 +291,15 @@ export default class Form {
                         this.errors.clear()
                         resolve(data)
                     })
-                    .catch(errors => {
-                        // errors occurred, record them, make the fields dirty and emit a validate event
-                        this.errors.clear()
-                        this.errors.record(errors)
-                        this.$v.$touch()
-                        this.$bus.$emit('validate')
-                        // reject(errors)
+                    .catch(error => {
+                        if (error.errors != null) {
+                            // errors occurred, record them, make the fields dirty and emit a validate event
+                            this.errors.clear()
+                            this.errors.record(error.errors)
+                            this.$v.$touch()
+                            this.$bus.$emit('validate')
+                            // reject(error)
+                        }
                     })
             })
         }
