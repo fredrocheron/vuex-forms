@@ -5,8 +5,8 @@
                    :id="id"
                    :name="name"
                    type="checkbox"
-                   :value="value"
-                   :checked="value === trueValue"
+                   :value="currentValue"
+                   :checked="currentValue === trueValue"
                    :required="required"
                    @change="handleCheckbox">
             {{ label }}

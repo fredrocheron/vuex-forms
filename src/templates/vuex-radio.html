@@ -6,7 +6,7 @@
                    :name="name"
                    :id="(id || name) + option[option_value]"
                    :value="option[option_value]"
-                   :checked="value === option[option_value]"
+                   :checked="currentValue === option[option_value]"
                    @change="handleRadio"/>
             {{ option[option_name] }}
         </label>
