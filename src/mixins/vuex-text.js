@@ -65,7 +65,7 @@ export default () => merge.recursive(true, VuexField, {
                 event.target.value = this.applySaveMask(value)
             }
 
-            this.value = value
+            this.currentValue = value
             this.emitEvent('input', event)
         },
 

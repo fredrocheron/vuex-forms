@@ -9,7 +9,7 @@ export default {
                 field += '.' + modifier
             }
         }
-        component.value       = form[field]
+        component.currentValue       = form[field]
         component.localErrors = form.errors.get(field)
 
         component.$on('input', (inputValue) => {
@@ -32,7 +32,7 @@ export default {
             component.localErrors = form.errors.get(field)
         })
         form.$bus.$on('reset', () => {
-            component.value       = form._data._original[field]
+            component.currentValue       = form._data._original[field]
             component.localErrors = null
             if (component.$refs.input) {
                 component.$refs.input.value = form._data._original[field]

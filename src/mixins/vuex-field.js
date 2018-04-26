@@ -10,7 +10,7 @@ export default {
     },
     data: () => ({
         masker: false,
-        value: null,
+        currentValue: null,
         activeKeyCode: 0,
         localErrors: null
     }),
@@ -34,7 +34,7 @@ export default {
         },
 
         inputEvent(event) {
-            this.value = event.target.value
+            this.currentValue = event.target.value
             this.emitEvent('input', event)
         },
 

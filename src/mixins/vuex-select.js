@@ -10,8 +10,8 @@ export default () => merge.recursive(true, VuexField, {
     },
     methods: {
         checkSelected(value) {
-            if (!this.multiple && this.value === value) return true
-            if (this.multiple && this.value !== null && value.length) return this.value.indexOf(value) !== -1
+            if (!this.multiple && this.currentValue === value) return true
+            if (this.multiple && this.currentValue !== null && value.length) return this.currentValue.indexOf(value) !== -1
         },
 
         handleInput(event) {
